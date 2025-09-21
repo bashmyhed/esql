@@ -22,6 +22,7 @@ output.elasticsearch:
 setup.template.name: "wazuh-alerts"
 setup.template.pattern: "wazuh-alerts-*"
 setup.ilm.enabled: false
+strict.perms: false
 
 logging.level: info
 logging.json: true
