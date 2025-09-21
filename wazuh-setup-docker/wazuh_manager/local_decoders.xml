@@ -1,0 +1,76 @@
+<!--
+  Local decoders for Wazuh NLP SIEM Integration
+  These decoders enhance log parsing for better field extraction
+-->
+
+<!-- SSH Authentication Decoder -->
+<decoder name="ssh-auth">
+  <prematch>sshd</prematch>
+</decoder>
+
+<decoder name="ssh-auth-failed">
+  <parent>ssh-auth</parent>
+  <regex>Failed password for (\S+) user (\S+) from (\S+) port (\d+)</regex>
+  <order>auth_method,user,srcip,srcport</order>
+</decoder>
+
+<decoder name="ssh-auth-success">
+  <parent>ssh-auth</parent>
+  <regex>Accepted (\S+) for (\S+) from (\S+) port (\d+)</regex>
+  <order>auth_method,user,srcip,srcport</order>
+</decoder>
+
+<!-- Firewall Decoder -->
+<decoder name="ufw-block">
+  <prematch>[UFW BLOCK]</prematch>
+</decoder>
+
+<decoder name="ufw-block-details">
+  <parent>ufw-block</parent>
+  <regex>SRC=(\S+) DST=(\S+).*DPT=(\d+)</regex>
+  <order>srcip,dstip,dstport</order>
+</decoder>
+
+<!-- Apache/Web Server Decoder -->
+<decoder name="apache-error">
+  <prematch>apache.*error</prematch>
+</decoder>
+
+<decoder name="apache-error-details">
+  <parent>apache-error</parent>
+  <regex>client (\S+):.*"(\S+ \S+ \S+)"</regex>
+  <order>srcip,request</order>
+</decoder>
+
+<!-- System Service Decoder -->
+<decoder name="systemd-service">
+  <prematch>systemd</prematch>
+</decoder>
+
+<decoder name="systemd-service-failed">
+  <parent>systemd-service</parent>
+  <regex>Failed to start (\S+)</regex>
+  <order>service_name</order>
+</decoder>
+
+<!-- Database Decoder -->
+<decoder name="mysql-error">
+  <prematch>mysql</prematch>
+</decoder>
+
+<decoder name="mysql-error-details">
+  <parent>mysql-error</parent>
+  <regex>Access denied for user '(\S+)'@'(\S+)'</regex>
+  <order>user,srcip</order>
+</decoder>
+
+<!-- VPN Decoder -->
+<decoder name="openvpn">
+  <prematch>openvpn</prematch>
+</decoder>
+
+<decoder name="openvpn-connect">
+  <parent>openvpn</parent>
+  <regex>(\S+)/(\S+):(\d+) peer info: IV_VER=(\S+)</regex>
+  <order>srcip,hostname,srcport,version</order>
+</decoder>

@@ -1,0 +1,153 @@
+<!--
+  Local rules for Wazuh NLP SIEM Integration
+  These rules provide enhanced detection for common security scenarios
+-->
+
+<group name="local,syslog,">
+
+  <!-- SSH Authentication Failures -->
+  <rule id="100001" level="7">
+    <if_sid>5503</if_sid>
+    <description>SSH authentication failure from external IP</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+  </rule>
+
+  <rule id="100002" level="10">
+    <if_sid>100001</if_sid>
+    <same_source_ip />
+    <description>Multiple SSH authentication failures from same source</description>
+    <options>no_email_alert</options>
+    <group>authentication_failures,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+  </rule>
+
+  <!-- System Service Failures -->
+  <rule id="100003" level="8">
+    <match>Failed to start|failed to start|service failed</match>
+    <description>Critical system service failed to start</description>
+    <group>system,service_failure,</group>
+  </rule>
+
+  <!-- Network Traffic Blocks -->
+  <rule id="100004" level="6">
+    <match>UFW BLOCK|iptables.*DENY|firewall.*block</match>
+    <description>Network traffic blocked by firewall</description>
+    <group>firewall,blocked_connection,</group>
+  </rule>
+
+  <rule id="100005" level="9">
+    <if_sid>100004</if_sid>
+    <same_source_ip />
+    <description>Multiple blocked connections from same source IP</description>
+    <group>firewall,blocked_connections,attack_pattern,</group>
+  </rule>
+
+  <!-- Apache/Web Server Errors -->
+  <rule id="100006" level="5">
+    <match>apache.*error|nginx.*error|http.*500|http.*404</match>
+    <description>Web server error detected</description>
+    <group>web,apache,error,</group>
+  </rule>
+
+  <rule id="100007" level="8">
+    <if_sid>30400,30301</if_sid>
+    <same_source_ip />
+    <description>Multiple web attacks from same source</description>
+    <group>web,attack,</group>
+  </rule>
+
+  <!-- File System Changes -->
+  <rule id="100008" level="7">
+    <if_sid>550</if_sid>
+    <field name="file">/etc/passwd|/etc/shadow|/etc/sudoers</field>
+    <description>Critical system file modified</description>
+    <group>syscheck,pci_dss_11.5,</group>
+  </rule>
+
+  <!-- Root/Admin Activity -->
+  <rule id="100009" level="8">
+    <match>sudo.*root|su.*root|privilege.*escalation</match>
+    <description>Root privilege escalation detected</description>
+    <group>privilege_escalation,pci_dss_10.2.2,</group>
+  </rule>
+
+  <!-- Process Monitoring -->
+  <rule id="100010" level="6">
+    <match>suspicious.*process|unknown.*binary|backdoor</match>
+    <description>Suspicious process execution detected</description>
+    <group>rootcheck,trojan,</group>
+  </rule>
+
+  <!-- Login Success (for balance) -->
+  <rule id="100011" level="3">
+    <if_sid>5501</if_sid>
+    <description>Successful SSH login</description>
+    <group>authentication_success,pci_dss_10.2.5,</group>
+  </rule>
+
+  <!-- Database Activity -->
+  <rule id="100012" level="6">
+    <match>mysql.*error|postgresql.*error|database.*fail</match>
+    <description>Database error detected</description>
+    <group>database,mysql,postgresql,</group>
+  </rule>
+
+  <!-- Mail Server Activity -->
+  <rule id="100013" level="5">
+    <match>postfix.*reject|sendmail.*reject|mail.*bounce</match>
+    <description>Mail server rejection detected</description>
+    <group>mail,postfix,spam,</group>
+  </rule>
+
+  <!-- DNS Activity -->
+  <rule id="100014" level="4">
+    <match>named.*query|dns.*request|resolve.*fail</match>
+    <description>DNS activity detected</description>
+    <group>dns,named,</group>
+  </rule>
+
+  <!-- VPN Activity -->
+  <rule id="100015" level="5">
+    <match>vpn.*connect|openvpn.*login|ipsec.*connect</match>
+    <description>VPN connection detected</description>
+    <group>vpn,remote_access,</group>
+  </rule>
+
+</group>
+
+<!-- Rules for enhanced log generation and testing -->
+<group name="local,testing,">
+
+  <!-- Enhanced logging for authentication events -->
+  <rule id="100020" level="3">
+    <match>authentication|login|logon|signin</match>
+    <description>Authentication event detected</description>
+    <group>authentication,login_activity,</group>
+  </rule>
+
+  <!-- Security Configuration Assessment Results -->
+  <rule id="100021" level="6">
+    <if_sid>19009</if_sid>
+    <description>SCA policy compliance check failed</description>
+    <group>sca,compliance,policy_violation,</group>
+  </rule>
+
+  <rule id="100022" level="4">
+    <if_sid>19004</if_sid>
+    <description>SCA policy compliance check passed</description>
+    <group>sca,compliance,policy_success,</group>
+  </rule>
+
+  <!-- Rootcheck enhanced rules -->
+  <rule id="100023" level="9">
+    <if_sid>510</if_sid>
+    <description>Rootkit detection - suspicious file found</description>
+    <group>rootcheck,rootkit,malware,</group>
+  </rule>
+
+  <rule id="100024" level="10">
+    <if_sid>516</if_sid>
+    <description>Rootkit detection - system file corruption</description>
+    <group>rootcheck,system_integrity,corruption,</group>
+  </rule>
+
+</group>

@@ -1,0 +1,138 @@
+version: '3.8'
+
+services:
+  # Elasticsearch single node cluster
+  wazuh-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.9
+    container_name: wazuh-elasticsearch
+    restart: always
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+      - cluster.name=wazuh-cluster
+      - node.name=wazuh-elasticsearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - xpack.security.enabled=false
+      - xpack.monitoring.collection.enabled=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - wazuh-elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - wazuh
+
+  # Kibana for visualization
+  wazuh-kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.9
+    container_name: wazuh-kibana
+    restart: always
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_URL=http://wazuh-elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=["http://wazuh-elasticsearch:9200"]
+      - SERVER_HOST=0.0.0.0
+      - SERVER_NAME=wazuh-kibana
+      - LOGGING_VERBOSE=false
+    depends_on:
+      - wazuh-elasticsearch
+    networks:
+      - wazuh
+
+  # Wazuh Manager
+  wazuh-manager:
+    image: wazuh/wazuh-manager:4.7.3
+    container_name: wazuh-manager
+    restart: always
+    ports:
+      - "1514:1514"    # Wazuh agent communication
+      - "1515:1515"    # Wazuh agent enrollment
+      - "514:514/udp"  # Syslog
+      - "55000:55000"  # Wazuh API
+    environment:
+      - INDEXER_URL=https://wazuh-elasticsearch:9200
+      - INDEXER_USERNAME=
+      - INDEXER_PASSWORD=
+      - FILEBEAT_SSL_VERIFICATION_MODE=none
+      - SSL_CERTIFICATE_AUTHORITIES=
+      - SSL_CERTIFICATE=
+      - SSL_KEY=
+      - API_USERNAME=wazuh-wui
+      - API_PASSWORD=MyS3cr37P450r.*-
+    volumes:
+      - wazuh-manager-config:/wazuh-config-mount/etc/ossec
+      - wazuh-manager-logs:/var/ossec/logs
+      - wazuh-manager-queue:/var/ossec/queue
+      - wazuh-manager-var-multigroups:/var/ossec/var/multigroups
+      - wazuh-manager-integrations:/var/ossec/integrations
+      - wazuh-manager-active-response:/var/ossec/active-response/bin
+      - wazuh-manager-agentless:/var/ossec/agentless
+      - wazuh-manager-wodles:/var/ossec/wodles
+      - ./wazuh_manager/ossec.conf:/wazuh-config-mount/etc/ossec/ossec.conf
+      - ./wazuh_manager/local_rules.xml:/var/ossec/etc/rules/local_rules.xml
+      - ./wazuh_manager/local_decoders.xml:/var/ossec/etc/decoders/local_decoders.xml
+    depends_on:
+      - wazuh-elasticsearch
+    networks:
+      - wazuh
+
+  # Filebeat to send Wazuh alerts to Elasticsearch
+  wazuh-filebeat:
+    image: docker.elastic.co/beats/filebeat:7.17.9
+    container_name: wazuh-filebeat
+    restart: always
+    user: root
+    environment:
+      - ELASTICSEARCH_HOSTS=http://wazuh-elasticsearch:9200
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - wazuh-manager-logs:/var/ossec/logs:ro
+      - filebeat-data:/usr/share/filebeat/data
+    depends_on:
+      - wazuh-manager
+      - wazuh-elasticsearch
+    networks:
+      - wazuh
+
+  # Log generator for testing (generates sample security events)
+  log-generator:
+    image: mingrammer/flog
+    container_name: wazuh-log-generator
+    restart: always
+    command: >
+      sh -c "
+      while true; do
+        flog -t log -f apache_common -n 5 -d 1 -l | logger -t apache;
+        flog -t log -f apache_error -n 3 -d 1 -l | logger -t apache_error;
+        echo '$(date) sshd[$$]: Failed password for invalid user admin from 192.168.1.100 port 22 ssh2' | logger -t sshd;
+        echo '$(date) kernel: [UFW BLOCK] IN=eth0 OUT= MAC= SRC=192.168.1.200 DST=192.168.1.1 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=12345 DF PROTO=TCP SPT=45678 DPT=80 WINDOW=29200 RES=0x00 SYN URGP=0' | logger -t kernel;
+        echo '$(date) systemd[1]: Failed to start some critical service' | logger -t systemd;
+        sleep 30;
+      done
+      "
+    depends_on:
+      - wazuh-manager
+    networks:
+      - wazuh
+
+volumes:
+  wazuh-elasticsearch-data:
+  wazuh-manager-config:
+  wazuh-manager-logs:
+  wazuh-manager-queue:
+  wazuh-manager-var-multigroups:
+  wazuh-manager-integrations:
+  wazuh-manager-active-response:
+  wazuh-manager-agentless:
+  wazuh-manager-wodles:
+  filebeat-data:
+
+networks:
+  wazuh:
+    driver: bridge
