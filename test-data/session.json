@@ -1,0 +1,44 @@
+{
+  "admin_username": "admin",
+  "admin_password": "password",
+  "chat_name": "Test Session",
+  "rules": [
+    {
+      "id": 5503,
+      "description": "Authentication failure",
+      "type": "authentication",
+      "level": 5,
+      "groups": ["authentication_failed"]
+    },
+    {
+      "id": 5504,
+      "description": "SQL injection attempt",
+      "type": "security",
+      "level": 12,
+      "groups": ["web_attack"]
+    },
+    {
+      "id": 5505,
+      "description": "File modification detected",
+      "type": "system",
+      "level": 7,
+      "groups": ["file_integrity"]
+    },
+    {
+      "id": 5506,
+      "description": "Brute force attack detected",
+      "type": "security",
+      "level": 10,
+      "groups": ["brute_force"]
+    },
+    {
+      "id": 5507,
+      "description": "XSS attack attempt",
+      "type": "security",
+      "level": 8,
+      "groups": ["web_attack"]
+    }
+  ]
+}
+
+

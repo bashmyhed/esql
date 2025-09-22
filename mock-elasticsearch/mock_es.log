@@ -1,0 +1,25 @@
+Starting Mock Elasticsearch service...
+Available endpoints:
+  GET  / - Cluster info
+  GET  /_cluster/health - Cluster health
+  POST /wazuh-alerts-*/_search - Search logs
+  GET  /_cat/indices - List indices
+  GET  /wazuh-alerts-*/_mapping - Get mapping
+
+Sample data: 105 log entries
+Running on http://localhost:9200
+ * Serving Flask app 'mock_elasticsearch'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:9200
+ * Running on http://192.168.1.11:9200
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 101-299-327
+127.0.0.1 - - [23/Sep/2025 04:36:46] "GET /_cluster/health HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2025 04:36:47] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2025 04:36:56] "GET /_cluster/health HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2025 04:37:07] "POST /wazuh-alerts-*/_search HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2025 05:15:42] "GET / HTTP/1.1" 200 -

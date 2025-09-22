@@ -1,0 +1,213 @@
+{
+  "rules": {
+    "authentication": {
+      "auth_failure": {
+        "id": 5503,
+        "description": "Authentication failure",
+        "level": 5,
+        "groups": ["authentication_failed"],
+        "category": "authentication"
+      },
+      "multiple_failed_logins": {
+        "id": 5506,
+        "description": "Multiple failed login attempts",
+        "level": 10,
+        "groups": ["brute_force", "authentication_failed"],
+        "category": "authentication"
+      },
+      "privilege_escalation": {
+        "id": 5508,
+        "description": "Privilege escalation attempt",
+        "level": 11,
+        "groups": ["privilege_escalation"],
+        "category": "authentication"
+      }
+    },
+    "security": {
+      "sql_injection": {
+        "id": 5504,
+        "description": "SQL injection attempt",
+        "level": 12,
+        "groups": ["web_attack"],
+        "category": "security"
+      },
+      "xss_attack": {
+        "id": 5507,
+        "description": "XSS attack attempt",
+        "level": 8,
+        "groups": ["web_attack"],
+        "category": "security"
+      },
+      "brute_force": {
+        "id": 5506,
+        "description": "Brute force attack detected",
+        "level": 10,
+        "groups": ["brute_force"],
+        "category": "security"
+      },
+      "malware_detection": {
+        "id": 5509,
+        "description": "Malware detection",
+        "level": 13,
+        "groups": ["malware"],
+        "category": "security"
+      },
+      "network_intrusion": {
+        "id": 5510,
+        "description": "Network intrusion",
+        "level": 9,
+        "groups": ["network"],
+        "category": "security"
+      },
+      "suspicious_network_activity": {
+        "id": 5511,
+        "description": "Suspicious network activity",
+        "level": 6,
+        "groups": ["network", "suspicious"],
+        "category": "security"
+      },
+      "data_exfiltration": {
+        "id": 5512,
+        "description": "Data exfiltration attempt",
+        "level": 14,
+        "groups": ["data_loss", "exfiltration"],
+        "category": "security"
+      }
+    },
+    "system": {
+      "file_modification": {
+        "id": 5505,
+        "description": "File modification detected",
+        "level": 7,
+        "groups": ["file_integrity"],
+        "category": "system"
+      },
+      "system_reboot": {
+        "id": 5513,
+        "description": "System reboot detected",
+        "level": 3,
+        "groups": ["system_event"],
+        "category": "system"
+      },
+      "service_start_stop": {
+        "id": 5514,
+        "description": "Service start/stop event",
+        "level": 4,
+        "groups": ["system_event", "service"],
+        "category": "system"
+      },
+      "disk_space_low": {
+        "id": 5515,
+        "description": "Low disk space warning",
+        "level": 6,
+        "groups": ["system_health", "storage"],
+        "category": "system"
+      },
+      "process_anomaly": {
+        "id": 5516,
+        "description": "Unusual process activity",
+        "level": 8,
+        "groups": ["process_monitoring", "anomaly"],
+        "category": "system"
+      }
+    },
+    "network": {
+      "port_scan": {
+        "id": 5517,
+        "description": "Port scan detected",
+        "level": 7,
+        "groups": ["network_scan", "reconnaissance"],
+        "category": "network"
+      },
+      "ddos_attack": {
+        "id": 5518,
+        "description": "DDoS attack detected",
+        "level": 11,
+        "groups": ["ddos", "network_attack"],
+        "category": "network"
+      },
+      "suspicious_dns": {
+        "id": 5519,
+        "description": "Suspicious DNS activity",
+        "level": 6,
+        "groups": ["dns", "suspicious"],
+        "category": "network"
+      },
+      "firewall_block": {
+        "id": 5520,
+        "description": "Firewall blocked connection",
+        "level": 5,
+        "groups": ["firewall", "blocked"],
+        "category": "network"
+      }
+    },
+    "compliance": {
+      "policy_violation": {
+        "id": 5521,
+        "description": "Security policy violation",
+        "level": 8,
+        "groups": ["compliance", "policy"],
+        "category": "compliance"
+      },
+      "data_access_violation": {
+        "id": 5522,
+        "description": "Unauthorized data access",
+        "level": 9,
+        "groups": ["compliance", "data_access"],
+        "category": "compliance"
+      },
+      "audit_log_tampering": {
+        "id": 5523,
+        "description": "Audit log tampering detected",
+        "level": 12,
+        "groups": ["compliance", "audit", "tampering"],
+        "category": "compliance"
+      }
+    },
+    "application": {
+      "web_application_attack": {
+        "id": 5524,
+        "description": "Web application attack",
+        "level": 9,
+        "groups": ["web_attack", "application"],
+        "category": "application"
+      },
+      "api_abuse": {
+        "id": 5525,
+        "description": "API abuse detected",
+        "level": 7,
+        "groups": ["api", "abuse"],
+        "category": "application"
+      },
+      "database_error": {
+        "id": 5526,
+        "description": "Database error or anomaly",
+        "level": 6,
+        "groups": ["database", "error"],
+        "category": "application"
+      }
+    }
+  },
+  "metadata": {
+    "version": "1.0",
+    "created": "2024-09-23",
+    "description": "Comprehensive Wazuh rules for ESQL testing",
+    "total_rules": 24,
+    "categories": [
+      "authentication",
+      "security", 
+      "system",
+      "network",
+      "compliance",
+      "application"
+    ],
+    "severity_levels": {
+      "critical": [13, 14],
+      "high": [9, 10, 11, 12],
+      "medium": [6, 7, 8],
+      "low": [3, 4, 5],
+      "info": [1, 2]
+    }
+  }
+}
+

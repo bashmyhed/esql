@@ -1,0 +1,171 @@
+[
+  {
+    "id": 5503,
+    "description": "Authentication failure",
+    "type": "authentication",
+    "level": 5,
+    "groups": ["authentication_failed"]
+  },
+  {
+    "id": 5504,
+    "description": "SQL injection attempt",
+    "type": "security",
+    "level": 12,
+    "groups": ["web_attack"]
+  },
+  {
+    "id": 5505,
+    "description": "File modification detected",
+    "type": "system",
+    "level": 7,
+    "groups": ["file_integrity"]
+  },
+  {
+    "id": 5506,
+    "description": "Brute force attack detected",
+    "type": "security",
+    "level": 10,
+    "groups": ["brute_force"]
+  },
+  {
+    "id": 5507,
+    "description": "XSS attack attempt",
+    "type": "security",
+    "level": 8,
+    "groups": ["web_attack"]
+  },
+  {
+    "id": 5508,
+    "description": "Privilege escalation attempt",
+    "type": "authentication",
+    "level": 11,
+    "groups": ["privilege_escalation"]
+  },
+  {
+    "id": 5509,
+    "description": "Malware detection",
+    "type": "security",
+    "level": 13,
+    "groups": ["malware"]
+  },
+  {
+    "id": 5510,
+    "description": "Network intrusion",
+    "type": "security",
+    "level": 9,
+    "groups": ["network"]
+  },
+  {
+    "id": 5511,
+    "description": "Suspicious network activity",
+    "type": "security",
+    "level": 6,
+    "groups": ["network", "suspicious"]
+  },
+  {
+    "id": 5512,
+    "description": "Data exfiltration attempt",
+    "type": "security",
+    "level": 14,
+    "groups": ["data_loss", "exfiltration"]
+  },
+  {
+    "id": 5513,
+    "description": "System reboot detected",
+    "type": "system",
+    "level": 3,
+    "groups": ["system_event"]
+  },
+  {
+    "id": 5514,
+    "description": "Service start/stop event",
+    "type": "system",
+    "level": 4,
+    "groups": ["system_event", "service"]
+  },
+  {
+    "id": 5515,
+    "description": "Low disk space warning",
+    "type": "system",
+    "level": 6,
+    "groups": ["system_health", "storage"]
+  },
+  {
+    "id": 5516,
+    "description": "Unusual process activity",
+    "type": "system",
+    "level": 8,
+    "groups": ["process_monitoring", "anomaly"]
+  },
+  {
+    "id": 5517,
+    "description": "Port scan detected",
+    "type": "network",
+    "level": 7,
+    "groups": ["network_scan", "reconnaissance"]
+  },
+  {
+    "id": 5518,
+    "description": "DDoS attack detected",
+    "type": "network",
+    "level": 11,
+    "groups": ["ddos", "network_attack"]
+  },
+  {
+    "id": 5519,
+    "description": "Suspicious DNS activity",
+    "type": "network",
+    "level": 6,
+    "groups": ["dns", "suspicious"]
+  },
+  {
+    "id": 5520,
+    "description": "Firewall blocked connection",
+    "type": "network",
+    "level": 5,
+    "groups": ["firewall", "blocked"]
+  },
+  {
+    "id": 5521,
+    "description": "Security policy violation",
+    "type": "compliance",
+    "level": 8,
+    "groups": ["compliance", "policy"]
+  },
+  {
+    "id": 5522,
+    "description": "Unauthorized data access",
+    "type": "compliance",
+    "level": 9,
+    "groups": ["compliance", "data_access"]
+  },
+  {
+    "id": 5523,
+    "description": "Audit log tampering detected",
+    "type": "compliance",
+    "level": 12,
+    "groups": ["compliance", "audit", "tampering"]
+  },
+  {
+    "id": 5524,
+    "description": "Web application attack",
+    "type": "application",
+    "level": 9,
+    "groups": ["web_attack", "application"]
+  },
+  {
+    "id": 5525,
+    "description": "API abuse detected",
+    "type": "application",
+    "level": 7,
+    "groups": ["api", "abuse"]
+  },
+  {
+    "id": 5526,
+    "description": "Database error or anomaly",
+    "type": "application",
+    "level": 6,
+    "groups": ["database", "error"]
+  }
+]
+
